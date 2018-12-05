@@ -14,6 +14,12 @@ public class CodeReviewTest {
     //Review Comment: Please define Purpose of the class in one or two liner summary
     volatile Integer totalAge = 0;
 
+    /*Review Comment:: Please use the constructor only for initializing the class, there shouldn't be any 
+       logic manipulation except assigning values to few default internal variables
+       Also please remove dependecy from consutructor by removing personPersonDatabase paramter fromn constructor 
+       and create getter and setter methods for this purpose, otherwise it'd be waste of one resource(Object creation) 
+       in case change of value of attribute
+    */
     CodeReviewTest(PersonDatabase<Person> personPersonDatabase) {
         Person[] persons = null;
         try {
@@ -26,9 +32,12 @@ public class CodeReviewTest {
         List<Person> personsList = new LinkedList();
 
         /*
-          Review Comment: Altough nothing wrong in this approach but it'd be better if use for each loop here,
+          Review Comment: 
+          1. Altough nothing wrong in this approach but it'd be better if use 'for-each' loop here,
           because for each loop is efficient in all cases as its uses Iterator specific for the collection plus
           I dont see index has been used anywhere else.
+          2. Also populating personList here should be done in sepearate method named 'populatePersonList'
+             so that code could satisfy single responsibility principles
         */
         for (int i = 0; i <= persons.length; i++) {
             personsList.add(persons[i]);
@@ -40,6 +49,7 @@ public class CodeReviewTest {
 
         List<Person> males = new LinkedList<>();
 
+        //Review Comment:: Create separate method named it 'populateMalePersonsList'
         for (Person person : personsList) {
             switch (person.gender) {
                 case "Female": personsList.remove(person);
@@ -55,6 +65,7 @@ public class CodeReviewTest {
 }
 
 
+//Review Comment: Please define Purpose of the class in one or two liner summary
 class Person {
 
     private int age;
@@ -79,7 +90,7 @@ class Person {
 
 }
 
-
+//Review Comment: Please define Purpose of the Interface in one or two liner summary
 interface PersonDatabase<E> {
 
     Person[] getAllPersons() throws IOException;
